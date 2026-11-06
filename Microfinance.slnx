@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Core/">
+    <Project Path="src/Core/Microfinance.Application/Microfinance.Application.csproj" />
+    <Project Path="src/Core/Microfinance.Domain/Microfinance.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/Microfinance.Infrastructure/Microfinance.Infrastructure.csproj" />
+    <Project Path="src/Infrastructure/Microfinance.Persistence/Microfinance.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="src/Presentation/Microfinance.WebApi/Microfinance.WebApi.csproj" />
+  </Folder>
+</Solution>
