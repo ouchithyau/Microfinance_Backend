@@ -1,4 +1,4 @@
-namespace Microfinance.Domain.Enums;
+﻿namespace Microfinance.Domain.Enums;
 
 public enum InterestCalculationType
 {
