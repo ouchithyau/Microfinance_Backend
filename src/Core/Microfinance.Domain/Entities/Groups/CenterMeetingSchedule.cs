@@ -2,7 +2,7 @@ using Microfinance.Domain.Common;
 
 namespace Microfinance.Domain.Entities.Groups;
 
-public class CenterMeetingSchedule : BaseEntity
+public class CenterMeetingSchedule : AuditableEntity
 {
     public Guid CenterId { get; set; }
     public Center? Center { get; set; }

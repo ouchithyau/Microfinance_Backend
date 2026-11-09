@@ -2,7 +2,7 @@ using Microfinance.Domain.Common;
 
 namespace Microfinance.Domain.Entities.Accounting;
 
-public class JournalEntryLine : BaseEntity
+public class JournalEntryLine : AuditableEntity
 {
     public Guid JournalEntryId { get; set; }
     public JournalEntry? JournalEntry { get; set; }
