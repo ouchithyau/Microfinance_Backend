@@ -81,4 +81,46 @@ public class AccountingController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Queries.GetBalanceSheetQuery(asOfDate ?? DateTime.UtcNow)));
     }
+    [HttpGet("chart-of-accounts/{id:guid}")]
+    public async Task<ActionResult> GetGlAccountById(Guid id)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Queries.GetGlAccountByIdQuery(id)));
+    }
+
+    [HttpPut("chart-of-accounts/{id:guid}")]
+    public async Task<ActionResult> UpdateGlAccount(Guid id, [FromBody] Microfinance.Application.Features.Accounting.Models.UpdateGlAccountRequest request)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Commands.UpdateGlAccountCommand(id, request.AccountName, request.IsActive)));
+    }
+
+    [HttpGet("journal-entries")]
+    public async Task<ActionResult> GetAllJournalEntries([FromQuery] bool? onlyPending)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Queries.GetAllJournalEntriesQuery(onlyPending)));
+    }
+
+    [HttpGet("journal-entries/{id:guid}")]
+    public async Task<ActionResult> GetJournalEntryById(Guid id)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Queries.GetJournalEntryByIdQuery(id)));
+    }
+
+    [HttpDelete("journal-entries/{id:guid}")]
+    public async Task<ActionResult> DeleteDraftJournalEntry(Guid id)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Commands.DeleteDraftJournalEntryCommand(id)));
+    }
+
+    [HttpGet("financial-periods")]
+    public async Task<ActionResult> GetFinancialPeriods()
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Queries.GetFinancialPeriodsQuery()));
+    }
+
+    [HttpPost("financial-periods")]
+    public async Task<ActionResult> CreateFinancialPeriod([FromBody] Microfinance.Application.Features.Accounting.Models.CreateFinancialPeriodRequest request)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.Accounting.Commands.CreateFinancialPeriodCommand(
+            request.PeriodName, request.StartDate, request.EndDate)));
+    }
 }

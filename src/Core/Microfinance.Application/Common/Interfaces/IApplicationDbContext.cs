@@ -49,6 +49,7 @@ public interface IApplicationDbContext
     DbSet<GeneralLedgerAccount> GeneralLedgerAccounts { get; }
     DbSet<JournalEntry> JournalEntries { get; }
     DbSet<JournalEntryLine> JournalEntryLines { get; }
+    DbSet<FinancialPeriod> FinancialPeriods { get; }
 
     // Auditing
     DbSet<AuditLog> AuditLogs { get; }
