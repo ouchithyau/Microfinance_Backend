@@ -12,4 +12,10 @@ public class JournalEntryLine : AuditableEntity
 
     public decimal DebitAmount { get; set; } = 0;
     public decimal CreditAmount { get; set; } = 0;
+    public bool IsApproved { get; set; } = false;
+    public Guid? ApprovedByUserId { get; set; }
+    public DateTime? ApprovedOnUtc { get; set; }
+
+    public bool IsReversed { get; set; } = false;
+    public Guid? ReversedByEntryId { get; set; }
 }

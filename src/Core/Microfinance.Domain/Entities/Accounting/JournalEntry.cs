@@ -9,5 +9,11 @@ public class JournalEntry : AuditableEntity, IAggregateRoot
     public string Description { get; set; } = string.Empty;
     public string ReferenceNumber { get; set; } = string.Empty; // Loan Account Number or Receipt Number
 
+    public bool IsApproved { get; set; } = false;
+    public Guid? ApprovedByUserId { get; set; }
+    public DateTime? ApprovedOnUtc { get; set; }
+    public bool IsReversed { get; set; } = false;
+    public Guid? ReversedByEntryId { get; set; }
+
     public ICollection<JournalEntryLine> Lines { get; set; } = new List<JournalEntryLine>();
 }

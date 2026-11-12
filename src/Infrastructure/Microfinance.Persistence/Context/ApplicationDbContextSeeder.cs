@@ -58,5 +58,24 @@ public static class ApplicationDbContextSeeder
             await context.Users.AddAsync(adminUser);
             await context.SaveChangesAsync();
         }
+
+        // 4. Default Chart of Accounts (GL Accounts) Seed කිරීම
+        if (!await context.GeneralLedgerAccounts.AnyAsync())
+        {
+            var glAccounts = new List<GeneralLedgerAccount>
+            {
+                new() { AccountCode = "1010", AccountName = "Cash in Hand & Branch Vault", Type = AccountType.Asset, Balance = 5000000m, IsActive = true, IsSystemControlled = false },
+                new() { AccountCode = "1020", AccountName = "Loans Receivable Portfolio", Type = AccountType.Asset, Balance = 0m, IsActive = true, IsSystemControlled = true },
+                new() { AccountCode = "1030", AccountName = "Cash Shortage Receivable", Type = AccountType.Asset, Balance = 0m, IsActive = true, IsSystemControlled = true },
+                new() { AccountCode = "2010", AccountName = "Customer Savings Deposits", Type = AccountType.Liability, Balance = 0m, IsActive = true, IsSystemControlled = true },
+                new() { AccountCode = "2020", AccountName = "Cash Overage Suspense", Type = AccountType.Liability, Balance = 0m, IsActive = true, IsSystemControlled = true },
+                new() { AccountCode = "3010", AccountName = "Share Capital & Retained Earnings", Type = AccountType.Equity, Balance = 5000000m, IsActive = true, IsSystemControlled = false },
+                new() { AccountCode = "4010", AccountName = "Loan Interest Income", Type = (AccountType)4, Balance = 0m, IsActive = true, IsSystemControlled = true },
+                new() { AccountCode = "5010", AccountName = "Operating & Branch Expenses", Type = AccountType.Expense, Balance = 0m, IsActive = true, IsSystemControlled = false }
+            };
+
+            await context.GeneralLedgerAccounts.AddRangeAsync(glAccounts);
+            await context.SaveChangesAsync();
+        }
     }
 }

@@ -52,16 +52,24 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSystemControlled")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ParentAccountId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentAccountId");
 
                     b.ToTable("GeneralLedgerAccounts");
                 });
@@ -71,6 +79,12 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ApprovedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ApprovedOnUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -87,7 +101,13 @@ namespace Microfinance.Persistence.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsReversed")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModifiedAt")
@@ -103,6 +123,9 @@ namespace Microfinance.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ReversedByEntryId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EntryNumber")
@@ -116,6 +139,12 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ApprovedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ApprovedOnUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -134,7 +163,13 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<Guid>("GeneralLedgerAccountId")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsReversed")
                         .HasColumnType("boolean");
 
                     b.Property<Guid>("JournalEntryId")
@@ -145,6 +180,9 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("ReversedByEntryId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -1308,6 +1346,15 @@ namespace Microfinance.Persistence.Migrations
                     b.HasIndex("LoanAccountId");
 
                     b.ToTable("RepaymentTransactions");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Accounting.GeneralLedgerAccount", b =>
+                {
+                    b.HasOne("Microfinance.Domain.Entities.Accounting.GeneralLedgerAccount", "ParentAccount")
+                        .WithMany()
+                        .HasForeignKey("ParentAccountId");
+
+                    b.Navigation("ParentAccount");
                 });
 
             modelBuilder.Entity("Microfinance.Domain.Entities.Accounting.JournalEntryLine", b =>

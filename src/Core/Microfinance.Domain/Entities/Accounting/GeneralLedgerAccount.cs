@@ -10,4 +10,7 @@ public class GeneralLedgerAccount : AuditableEntity, IAggregateRoot
     public AccountType Type { get; set; }
     public decimal Balance { get; set; } = 0;
     public bool IsActive { get; set; } = true;
+    public bool IsSystemControlled { get; set; } = false;
+    public Guid? ParentAccountId { get; set; }
+    public GeneralLedgerAccount? ParentAccount { get; set; }
 }
