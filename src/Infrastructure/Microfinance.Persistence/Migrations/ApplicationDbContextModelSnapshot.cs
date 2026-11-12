@@ -84,7 +84,8 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<string>("EntryNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -103,6 +104,9 @@ namespace Microfinance.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EntryNumber")
+                        .IsUnique();
 
                     b.ToTable("JournalEntries");
                 });
@@ -249,14 +253,16 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<string>("CustomerCode")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Gender")
                         .IsRequired()
@@ -283,15 +289,18 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("NicNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<Guid?>("SolidarityGroupId")
                         .HasColumnType("uuid");
@@ -301,6 +310,11 @@ namespace Microfinance.Persistence.Migrations
                     b.HasIndex("BranchId");
 
                     b.HasIndex("CenterId");
+
+                    b.HasIndex("CustomerCode")
+                        .IsUnique();
+
+                    b.HasIndex("NicNumber");
 
                     b.HasIndex("SolidarityGroupId");
 
@@ -585,6 +599,12 @@ namespace Microfinance.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("FailedLoginAttempts")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("ForcePasswordChangeOnNextLogin")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -601,9 +621,21 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("LockoutEndUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("PasswordChangedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PasswordResetTokenExpiryUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -668,6 +700,41 @@ namespace Microfinance.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Branches");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Identity.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ExpiresOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RevokedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microfinance.Domain.Entities.Loans.FieldAppraisal", b =>
@@ -739,7 +806,8 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -795,6 +863,9 @@ namespace Microfinance.Persistence.Migrations
                         .HasColumnType("numeric(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountNumber")
+                        .IsUnique();
 
                     b.HasIndex("CustomerId");
 
@@ -1263,16 +1334,18 @@ namespace Microfinance.Persistence.Migrations
                     b.HasOne("Microfinance.Domain.Entities.Identity.Branch", "Branch")
                         .WithMany()
                         .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Microfinance.Domain.Entities.Groups.Center", "Center")
                         .WithMany()
-                        .HasForeignKey("CenterId");
+                        .HasForeignKey("CenterId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Microfinance.Domain.Entities.Groups.SolidarityGroup", "SolidarityGroup")
                         .WithMany()
-                        .HasForeignKey("SolidarityGroupId");
+                        .HasForeignKey("SolidarityGroupId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Branch");
 
@@ -1363,6 +1436,17 @@ namespace Microfinance.Persistence.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Microfinance.Domain.Entities.Identity.RefreshToken", b =>
+                {
+                    b.HasOne("Microfinance.Domain.Entities.Identity.ApplicationUser", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microfinance.Domain.Entities.Loans.FieldAppraisal", b =>
                 {
                     b.HasOne("Microfinance.Domain.Entities.Identity.ApplicationUser", "FieldOfficer")
@@ -1387,7 +1471,7 @@ namespace Microfinance.Persistence.Migrations
                     b.HasOne("Microfinance.Domain.Entities.Customers.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Microfinance.Domain.Entities.Loans.LoanApplication", "LoanApplication")
@@ -1399,7 +1483,7 @@ namespace Microfinance.Persistence.Migrations
                     b.HasOne("Microfinance.Domain.Entities.Products.LoanProduct", "LoanProduct")
                         .WithMany()
                         .HasForeignKey("LoanProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customer");
@@ -1532,6 +1616,11 @@ namespace Microfinance.Persistence.Migrations
             modelBuilder.Entity("Microfinance.Domain.Entities.Identity.ApplicationRole", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microfinance.Domain.Entities.Identity.Branch", b =>

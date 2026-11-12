@@ -1,22 +1,31 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Microfinance.Application;
 using Microfinance.Infrastructure;
 using Microfinance.Persistence;
+using Microfinance.Persistence.Context;
 using Microfinance.WebApi.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers & JSON options
+// Add Controllers & API Explorer
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger with JWT Support
+// Configure Swagger with JWT Bearer Authentication & Unique Schema IDs
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Microfinance System API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Microfinance System API",
+        Version = "v1",
+        Description = "Clean Architecture Microfinance Backend API"
+    });
+
+    // Nested Generics (e.g. Result<List<UserDto>>) ගැටලුව වැළැක්වීමට
+    c.CustomSchemaIds(BuildUniqueSchemaId);
 
     var securityScheme = new OpenApiSecurityScheme
     {
@@ -51,7 +60,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Clean Architecture Layer Services
+// Register Clean Architecture Layers
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
@@ -81,16 +90,31 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Custom Global Exception Handler
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-if (app.Environment.IsDevelopment())
+// Seed initial Database records
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Microfinance System API v1"));
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await ApplicationDbContextSeeder.SeedInitialDataAsync(context);
 }
 
-app.UseHttpsRedirection();
+// Global Exception Handling Middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// Configure Swagger Middleware
+if (app.Environment.IsDevelopment())
+{
+    // SerializeAsV2 = true මගින් Swagger 2.0 format එකට force කරයි (Version parser errors වැළැක්වීමට)
+    app.UseSwagger(c =>
+    {
+        c.SerializeAsV2 = true;
+    });
+
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Microfinance System API v1");
+        c.RoutePrefix = "swagger";
+    });
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -98,3 +122,16 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Unique Schema ID Generator for Nested Generic Types
+static string BuildUniqueSchemaId(Type type)
+{
+    if (!type.IsGenericType)
+    {
+        return type.Name;
+    }
+
+    var genericName = type.Name.Split('`')[0];
+    var genericArgs = string.Join("", type.GetGenericArguments().Select(BuildUniqueSchemaId));
+    return $"{genericName}Of{genericArgs}";
+}

@@ -17,4 +17,15 @@ public class ApplicationUser : AuditableEntity, IAggregateRoot
 
     public Guid RoleId { get; set; }
     public ApplicationRole? Role { get; set; }
+
+    // Account Lockout & Password Policy Properties
+    public int FailedLoginAttempts { get; set; } = 0;
+    public DateTime? LockoutEndUtc { get; set; }
+    public DateTime PasswordChangedOnUtc { get; set; } = DateTime.UtcNow;
+    public bool ForcePasswordChangeOnNextLogin { get; set; } = false;
+    public string? PasswordResetToken { get; set; }
+    public DateTime? PasswordResetTokenExpiryUtc { get; set; }
+
+    // Navigation Collections
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

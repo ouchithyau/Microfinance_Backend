@@ -1,16 +1,12 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microfinance.Application.Common.Interfaces;
 using Microfinance.Domain.Entities.Identity;
 
-namespace Microfinance.Infrastructure.Identity;
-
-public interface IJwtTokenGenerator
-{
-    string GenerateToken(ApplicationUser user);
-}
+namespace Microfinance.Infrastructure.Services;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
@@ -23,30 +19,27 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     public string GenerateToken(ApplicationUser user)
     {
-        var secretKey = _configuration["JwtSettings:Secret"] ?? "MicrofinanceSystemSuperSecretKey2026!@#$%^";
+        var secretKey = _configuration["JwtSettings:Secret"]
+                        ?? "MicrofinanceSystemSuperSecretKey2026@LongAndSecureSecretKey!";
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
         {
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Email, user.Email),
-            new("FullName", user.FullName),
+            new(JwtRegisteredClaimNames.UniqueName, user.Username),
+            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(ClaimTypes.Role, user.Role?.Name ?? "FieldOfficer"),
             new("BranchId", user.BranchId.ToString())
         };
-
-        if (user.Role != null)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
-        }
 
         var token = new JwtSecurityToken(
             issuer: _configuration["JwtSettings:Issuer"] ?? "MicrofinanceApi",
             audience: _configuration["JwtSettings:Audience"] ?? "MicrofinanceClients",
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(8),
-            signingCredentials: creds
+            expires: DateTime.UtcNow.AddMinutes(30),
+            signingCredentials: credentials
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);

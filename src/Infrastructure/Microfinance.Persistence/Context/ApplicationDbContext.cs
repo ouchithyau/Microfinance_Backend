@@ -51,6 +51,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<JournalEntryLine> JournalEntryLines => Set<JournalEntryLine>();
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

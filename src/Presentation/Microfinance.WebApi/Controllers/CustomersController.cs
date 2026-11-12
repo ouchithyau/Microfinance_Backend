@@ -33,13 +33,19 @@ public class CustomersController : ApiControllerBase
 
     [HttpPost("{id:guid}/upload-kyc")]
     [Consumes("multipart/form-data")]
-    public async Task<ActionResult<Result<Guid>>> UploadKycDocument(Guid id, [FromForm] string documentType, IFormFile file)
+    public async Task<ActionResult<Result<Guid>>> UploadKycDocument(Guid id, [FromForm] UploadKycRequest request)
     {
-        if (file == null || file.Length == 0)
+        if (request.File == null || request.File.Length == 0)
             return BadRequest(Result<Guid>.Failure("No valid file provided."));
 
-        using var stream = file.OpenReadStream();
-        var command = new UploadKycDocumentCommand(id, documentType, stream, file.FileName, file.ContentType);
+        using var stream = request.File.OpenReadStream();
+        var command = new UploadKycDocumentCommand(id, request.DocumentType, stream, request.File.FileName, request.File.ContentType);
         return Ok(await Mediator.Send(command));
+    }
+
+    public class UploadKycRequest
+    {
+        public string DocumentType { get; set; } = string.Empty;
+        public IFormFile File { get; set; } = null!;
     }
 }

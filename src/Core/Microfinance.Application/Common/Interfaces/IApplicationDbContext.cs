@@ -16,6 +16,7 @@ public interface IApplicationDbContext
     DbSet<Branch> Branches { get; }
     DbSet<ApplicationRole> Roles { get; }
     DbSet<ApplicationUser> Users { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
 
     // Groups & Centers
     DbSet<Center> Centers { get; }
