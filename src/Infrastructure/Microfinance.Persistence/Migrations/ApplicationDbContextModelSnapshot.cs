@@ -747,17 +747,41 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
+                    b.Property<decimal>("CurrentVaultBalance")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsOpenForTransactions")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastClosedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastOpenedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("MaxCashVaultLimit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("MaxLoanApprovalLimit")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<double>("ServiceRadiusKm")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
