@@ -70,4 +70,54 @@ public class BranchesController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new SetBranchDayStatusCommand(id, openForTransactions)));
     }
+    [HttpGet("by-code/{code}")]
+    public async Task<ActionResult> GetByCode(string code)
+    {
+        return Ok(await Mediator.Send(new GetBranchByCodeQuery(code)));
+    }
+
+    [HttpPost("cash-transfer")]
+    public async Task<ActionResult> TransferCash([FromBody] InterBranchCashTransferRequest request)
+    {
+        return Ok(await Mediator.Send(new InterBranchCashTransferCommand(
+            request.FromBranchId, request.ToBranchId, request.Amount, request.Remarks)));
+    }
+
+    [HttpGet("{id:guid}/cash-transfers")]
+    public async Task<ActionResult> GetCashTransfers(Guid id)
+    {
+        return Ok(await Mediator.Send(new GetBranchCashTransfersQuery(id)));
+    }
+
+    [HttpPost("{id:guid}/transfer-portfolio")]
+    public async Task<ActionResult> TransferPortfolio(Guid id, [FromBody] TransferPortfolioRequest request)
+    {
+        return Ok(await Mediator.Send(new TransferBranchPortfolioCommand(
+            id, request.ToBranchId, request.SpecificCenterId)));
+    }
+
+    [HttpGet("{id:guid}/holidays")]
+    public async Task<ActionResult> GetHolidays(Guid id, [FromQuery] int? year)
+    {
+        return Ok(await Mediator.Send(new GetBranchHolidaysQuery(id, year)));
+    }
+
+    [HttpPost("{id:guid}/holidays")]
+    public async Task<ActionResult> AddHoliday(Guid id, [FromBody] CreateBranchHolidayRequest request)
+    {
+        return Ok(await Mediator.Send(new AddBranchHolidayCommand(
+            id, request.HolidayDate, request.Name, request.IsRecurringAnnually)));
+    }
+
+    [HttpDelete("{id:guid}/holidays/{holidayId:guid}")]
+    public async Task<ActionResult> DeleteHoliday(Guid id, Guid holidayId)
+    {
+        return Ok(await Mediator.Send(new DeleteBranchHolidayCommand(id, holidayId)));
+    }
+
+    [HttpGet("{id:guid}/staff")]
+    public async Task<ActionResult> GetStaff(Guid id)
+    {
+        return Ok(await Mediator.Send(new GetBranchStaffQuery(id)));
+    }
 }

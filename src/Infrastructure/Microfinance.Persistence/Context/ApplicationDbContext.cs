@@ -1,15 +1,16 @@
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 using Microfinance.Application.Common.Interfaces;
 using Microfinance.Domain.Common;
 using Microfinance.Domain.Entities.Accounting;
 using Microfinance.Domain.Entities.Auditing;
+using Microfinance.Domain.Entities.Branches;
 using Microfinance.Domain.Entities.Customers;
 using Microfinance.Domain.Entities.Groups;
 using Microfinance.Domain.Entities.Identity;
 using Microfinance.Domain.Entities.Loans;
 using Microfinance.Domain.Entities.Products;
 using Microfinance.Domain.Entities.Repayments;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Microfinance.Persistence.Context;
 
@@ -21,6 +22,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     }
 
     public DbSet<Branch> Branches => Set<Branch>();
+    public DbSet<BranchHoliday> BranchHolidays => Set<BranchHoliday>();
+    public DbSet<BranchCashTransfer> BranchCashTransfers => Set<BranchCashTransfer>();
     public DbSet<ApplicationRole> Roles => Set<ApplicationRole>();
     public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
 

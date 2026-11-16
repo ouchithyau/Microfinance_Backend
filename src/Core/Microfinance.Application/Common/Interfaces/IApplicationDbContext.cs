@@ -1,12 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using Microfinance.Domain.Entities.Accounting;
 using Microfinance.Domain.Entities.Auditing;
+using Microfinance.Domain.Entities.Branches;
 using Microfinance.Domain.Entities.Customers;
 using Microfinance.Domain.Entities.Groups;
 using Microfinance.Domain.Entities.Identity;
 using Microfinance.Domain.Entities.Loans;
 using Microfinance.Domain.Entities.Products;
 using Microfinance.Domain.Entities.Repayments;
+using Microsoft.EntityFrameworkCore;
 
 namespace Microfinance.Application.Common.Interfaces;
 
@@ -53,6 +54,9 @@ public interface IApplicationDbContext
 
     // Auditing
     DbSet<AuditLog> AuditLogs { get; }
+
+    DbSet<BranchHoliday> BranchHolidays { get; }
+    DbSet<BranchCashTransfer> BranchCashTransfers { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -250,6 +250,62 @@ namespace Microfinance.Persistence.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("Microfinance.Domain.Entities.Branches.BranchCashTransfer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("FromBranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ToBranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("TransferDateUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("TransferReference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BranchCashTransfers");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Branches.BranchHoliday", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("HolidayDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRecurringAnnually")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BranchHolidays");
+                });
+
             modelBuilder.Entity("Microfinance.Domain.Entities.Customers.BlacklistRecord", b =>
                 {
                     b.Property<Guid>("Id")
