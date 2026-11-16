@@ -1302,15 +1302,41 @@ namespace Microfinance.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("AllowMultiTrancheDisbursement")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("AllowTopUp")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("AllowedBranchIdsCsv")
+                        .HasColumnType("text");
+
                     b.Property<decimal>("AnnualInterestRate")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("ApprovalStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ApprovedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("CompulsorySavingsPercentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<int>("CoolingOffDaysAfterSettlement")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
+
+                    b.Property<bool>("DeductFeesFromDisbursement")
+                        .HasColumnType("boolean");
 
                     b.Property<decimal>("DefaultPenaltyRate")
                         .HasPrecision(18, 2)
@@ -1320,8 +1346,42 @@ namespace Microfinance.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<decimal>("EarlySettlementFeePercentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime?>("EffectiveFromDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("EffectiveToDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("FeeIncomeAccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("FixedProcessingFee")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<int>("Frequency")
                         .HasColumnType("integer");
+
+                    b.Property<int>("GracePeriodInstallments")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("InsuranceFeePercentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("InterestCalculationMethod")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("InterestIncomeAccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("InterestSlabsJson")
+                        .HasColumnType("text");
 
                     b.Property<int>("InterestType")
                         .HasColumnType("integer");
@@ -1338,12 +1398,48 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("LendingType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("LoanPortfolioAssetAccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("MaxConcurrentLoans")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxInstallments")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxLoanCycle")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxTranchesCount")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("MaximumAmount")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
                     b.Property<int>("MaximumTenure")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("MinCollateralCoveragePercentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<int>("MinCreditScoreRequired")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinInstallments")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinLoanCycle")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("MinPrincipalRepaidPercentageForTopUp")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.Property<decimal>("MinimumAmount")
                         .HasPrecision(18, 2)
@@ -1352,6 +1448,20 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<int>("MinimumTenure")
                         .HasColumnType("integer");
 
+                    b.Property<int>("PenaltyGraceDays")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("PenaltyIncomeAccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("PenaltyInterestRatePerAnnum")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("ProcessingFeePercentage")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1359,6 +1469,19 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RepaymentFrequency")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RequiredGuarantorsCount")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("WrittenOffExpenseAccountId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

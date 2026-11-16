@@ -27,4 +27,57 @@ public class LoanProductsController : ApiControllerBase
 
         return Ok(await Mediator.Send(command));
     }
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult> GetById(Guid id)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Queries.GetLoanProductByIdQuery(id)));
+    }
+
+    [HttpPost("enterprise")]
+    public async Task<ActionResult> CreateEnterprise([FromBody] Microfinance.Application.Features.LoanProducts.Models.UpsertLoanProductEnterpriseRequest request)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Commands.CreateLoanProductEnterpriseCommand(request)));
+    }
+
+    [HttpPut("{id:guid}/enterprise")]
+    public async Task<ActionResult> UpdateEnterprise(Guid id, [FromBody] Microfinance.Application.Features.LoanProducts.Models.UpsertLoanProductEnterpriseRequest request)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Commands.UpdateLoanProductEnterpriseCommand(id, request)));
+    }
+
+    [HttpPost("{id:guid}/approve")]
+    public async Task<ActionResult> ApproveProduct(Guid id, [FromQuery] bool isApproved, [FromQuery] string? rejectionReason)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Commands.ApproveLoanProductCommand(id, isApproved, rejectionReason)));
+    }
+
+    [HttpPatch("{id:guid}/toggle-status")]
+    public async Task<ActionResult> ToggleStatus(Guid id, [FromQuery] bool isActive)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Commands.ToggleLoanProductStatusCommand(id, isActive)));
+    }
+
+    [HttpPost("{id:guid}/clone")]
+    public async Task<ActionResult> CloneProduct(Guid id, [FromQuery] string newProductCode, [FromQuery] string newProductName)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Commands.CloneLoanProductCommand(id, newProductCode, newProductName)));
+    }
+
+    [HttpPost("{id:guid}/simulate-schedule")]
+    public async Task<ActionResult> SimulateSchedule(Guid id, [FromBody] Microfinance.Application.Features.LoanProducts.Models.SimulateLoanScheduleRequest request)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Queries.SimulateLoanScheduleQuery(id, request)));
+    }
+
+    [HttpGet("eligible-for-customer/{customerId:guid}")]
+    public async Task<ActionResult> GetEligibleForCustomer(Guid customerId)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Queries.GetEligibleLoanProductsForCustomerQuery(customerId)));
+    }
+
+    [HttpGet("{id:guid}/performance-summary")]
+    public async Task<ActionResult> GetPerformanceSummary(Guid id)
+    {
+        return Ok(await Mediator.Send(new Microfinance.Application.Features.LoanProducts.Queries.GetLoanProductPerformanceQuery(id)));
+    }
 }
