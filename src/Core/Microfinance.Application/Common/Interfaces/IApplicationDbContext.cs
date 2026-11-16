@@ -1,6 +1,7 @@
 using Microfinance.Domain.Entities.Accounting;
 using Microfinance.Domain.Entities.Auditing;
 using Microfinance.Domain.Entities.Branches;
+using Microfinance.Domain.Entities.Centers;
 using Microfinance.Domain.Entities.Customers;
 using Microfinance.Domain.Entities.Groups;
 using Microfinance.Domain.Entities.Identity;
@@ -23,6 +24,7 @@ public interface IApplicationDbContext
     DbSet<Center> Centers { get; }
     DbSet<SolidarityGroup> SolidarityGroups { get; }
     DbSet<CenterMeetingSchedule> CenterMeetingSchedules { get; }
+    DbSet<CenterMeetingAttendance> CenterMeetingAttendances { get; }
 
     // Customers & KYC
     DbSet<Customer> Customers { get; }

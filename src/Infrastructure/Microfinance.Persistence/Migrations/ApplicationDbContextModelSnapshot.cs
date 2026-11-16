@@ -306,6 +306,161 @@ namespace Microfinance.Persistence.Migrations
                     b.ToTable("BranchHolidays");
                 });
 
+            modelBuilder.Entity("Microfinance.Domain.Entities.Centers.Center", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CenterCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("CenterLeaderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CenterName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("CenterSecretaryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("FieldOfficerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("LocationAddress")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("MaxGroupsAllowed")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MeetingDay")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MeetingLocation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<TimeSpan>("MeetingTime")
+                        .HasColumnType("interval");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Centers");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Centers.CenterMeetingAttendance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CenterMeetingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsPresent")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("SavingsCollected")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CenterMeetingAttendances");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Centers.SolidarityGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CenterId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CompletedCgtSessions")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GroupCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("GroupSecuritySavings")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime?>("GrtApprovedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsGrtApproved")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("LeaderCustomerId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SolidarityGroups");
+                });
+
             modelBuilder.Entity("Microfinance.Domain.Entities.Customers.BlacklistRecord", b =>
                 {
                     b.Property<Guid>("Id")
@@ -316,6 +471,10 @@ namespace Microfinance.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -329,6 +488,12 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
+
+                    b.Property<string>("LiftReason")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LiftedOnUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ListedBy")
                         .IsRequired()
@@ -377,6 +542,10 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<decimal>("ExistingDebtObligations")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -390,6 +559,9 @@ namespace Microfinance.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsBlacklisted")
                         .HasColumnType("boolean");
 
@@ -398,6 +570,15 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<bool>("IsKycVerified")
                         .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPep")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("KycRejectionReason")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("KycVerifiedOnUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -410,15 +591,43 @@ namespace Microfinance.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<decimal>("MonthlyExpenses")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("MonthlyIncome")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<string>("NicNumber")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
+                    b.Property<string>("NomineeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NomineeNic")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NomineePhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NomineeRelationship")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<string>("RiskRating")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("SolidarityGroupId")
                         .HasColumnType("uuid");
@@ -508,6 +717,9 @@ namespace Microfinance.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -540,63 +752,6 @@ namespace Microfinance.Persistence.Migrations
                     b.ToTable("Guarantors");
                 });
 
-            modelBuilder.Entity("Microfinance.Domain.Entities.Groups.Center", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("BranchId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CenterCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CenterName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("FieldOfficerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<int>("MeetingDay")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("MeetingLocation")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<TimeSpan>("MeetingTime")
-                        .HasColumnType("interval");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("FieldOfficerId");
-
-                    b.ToTable("Centers");
-                });
-
             modelBuilder.Entity("Microfinance.Domain.Entities.Groups.CenterMeetingSchedule", b =>
                 {
                     b.Property<Guid>("Id")
@@ -618,6 +773,9 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsGeoVerified")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -627,56 +785,28 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<DateTime>("MeetingDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("RecordedLatitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("RecordedLongitude")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("Remarks")
                         .HasColumnType("text");
+
+                    b.Property<decimal>("TotalSavingsCollected")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CenterId");
 
                     b.ToTable("CenterMeetingSchedules");
-                });
-
-            modelBuilder.Entity("Microfinance.Domain.Entities.Groups.SolidarityGroup", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CenterId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("GroupCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("LeaderCustomerId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CenterId");
-
-                    b.ToTable("SolidarityGroups");
                 });
 
             modelBuilder.Entity("Microfinance.Domain.Entities.Identity.ApplicationRole", b =>
@@ -1488,12 +1618,12 @@ namespace Microfinance.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Microfinance.Domain.Entities.Groups.Center", "Center")
+                    b.HasOne("Microfinance.Domain.Entities.Centers.Center", "Center")
                         .WithMany()
                         .HasForeignKey("CenterId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Microfinance.Domain.Entities.Groups.SolidarityGroup", "SolidarityGroup")
+                    b.HasOne("Microfinance.Domain.Entities.Centers.SolidarityGroup", "SolidarityGroup")
                         .WithMany()
                         .HasForeignKey("SolidarityGroupId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -1527,40 +1657,10 @@ namespace Microfinance.Persistence.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Microfinance.Domain.Entities.Groups.Center", b =>
-                {
-                    b.HasOne("Microfinance.Domain.Entities.Identity.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Microfinance.Domain.Entities.Identity.ApplicationUser", "FieldOfficer")
-                        .WithMany()
-                        .HasForeignKey("FieldOfficerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("FieldOfficer");
-                });
-
             modelBuilder.Entity("Microfinance.Domain.Entities.Groups.CenterMeetingSchedule", b =>
                 {
-                    b.HasOne("Microfinance.Domain.Entities.Groups.Center", "Center")
-                        .WithMany("MeetingSchedules")
-                        .HasForeignKey("CenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Center");
-                });
-
-            modelBuilder.Entity("Microfinance.Domain.Entities.Groups.SolidarityGroup", b =>
-                {
-                    b.HasOne("Microfinance.Domain.Entities.Groups.Center", "Center")
-                        .WithMany("Groups")
+                    b.HasOne("Microfinance.Domain.Entities.Centers.Center", "Center")
+                        .WithMany()
                         .HasForeignKey("CenterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1755,13 +1855,6 @@ namespace Microfinance.Persistence.Migrations
                     b.Navigation("Documents");
 
                     b.Navigation("Guarantors");
-                });
-
-            modelBuilder.Entity("Microfinance.Domain.Entities.Groups.Center", b =>
-                {
-                    b.Navigation("Groups");
-
-                    b.Navigation("MeetingSchedules");
                 });
 
             modelBuilder.Entity("Microfinance.Domain.Entities.Identity.ApplicationRole", b =>

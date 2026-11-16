@@ -3,6 +3,7 @@ using Microfinance.Domain.Common;
 using Microfinance.Domain.Entities.Accounting;
 using Microfinance.Domain.Entities.Auditing;
 using Microfinance.Domain.Entities.Branches;
+using Microfinance.Domain.Entities.Centers;
 using Microfinance.Domain.Entities.Customers;
 using Microfinance.Domain.Entities.Groups;
 using Microfinance.Domain.Entities.Identity;
@@ -30,6 +31,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Center> Centers => Set<Center>();
     public DbSet<SolidarityGroup> SolidarityGroups => Set<SolidarityGroup>();
     public DbSet<CenterMeetingSchedule> CenterMeetingSchedules => Set<CenterMeetingSchedule>();
+    public DbSet<CenterMeetingAttendance> CenterMeetingAttendances => Set<CenterMeetingAttendance>();
 
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Guarantor> Guarantors => Set<Guarantor>();

@@ -13,4 +13,5 @@ public class Guarantor : AuditableEntity
     public string Address { get; set; } = string.Empty;
     public string Relationship { get; set; } = string.Empty; // Spouse, Neighbor, Group Member
     public decimal MonthlyIncome { get; set; }
+    public bool IsActive { get; set; } = true;
 }

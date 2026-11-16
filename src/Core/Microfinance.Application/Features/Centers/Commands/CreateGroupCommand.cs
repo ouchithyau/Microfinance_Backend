@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microfinance.Application.Common.Interfaces;
 using Microfinance.Application.Common.Models;
 using Microfinance.Domain.Entities.Groups;
+using Microfinance.Domain.Entities.Centers;
 
 namespace Microfinance.Application.Features.Centers.Commands;
 
