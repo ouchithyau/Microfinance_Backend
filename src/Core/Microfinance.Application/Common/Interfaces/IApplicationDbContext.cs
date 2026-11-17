@@ -8,6 +8,7 @@ using Microfinance.Domain.Entities.Identity;
 using Microfinance.Domain.Entities.Loans;
 using Microfinance.Domain.Entities.Products;
 using Microfinance.Domain.Entities.Repayments;
+using Microfinance.Domain.Entities.Reports;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microfinance.Application.Common.Interfaces;
@@ -59,6 +60,9 @@ public interface IApplicationDbContext
 
     DbSet<BranchHoliday> BranchHolidays { get; }
     DbSet<BranchCashTransfer> BranchCashTransfers { get; }
+
+    //Reports
+    DbSet<SavedReportTemplate> SavedReportTemplates { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

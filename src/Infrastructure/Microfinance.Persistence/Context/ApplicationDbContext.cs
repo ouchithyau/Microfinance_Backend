@@ -12,6 +12,7 @@ using Microfinance.Domain.Entities.Products;
 using Microfinance.Domain.Entities.Repayments;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Microfinance.Domain.Entities.Reports;
 
 namespace Microfinance.Persistence.Context;
 
@@ -59,6 +60,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public DbSet<FinancialPeriod> FinancialPeriods => Set<FinancialPeriod>();
+    public DbSet<SavedReportTemplate> SavedReportTemplates => Set<SavedReportTemplate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
