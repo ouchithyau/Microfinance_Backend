@@ -1620,7 +1620,20 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("InstallmentNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("InterestDue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPaid")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModifiedAt")
@@ -1632,8 +1645,35 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<Guid>("LoanAccountId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("PaidInterest")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PaidPenalty")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PaidPrincipal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PenaltyAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("PrincipalDue")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<int>("TotalInstallments")
                         .HasColumnType("integer");
+
+                    b.Property<decimal>("WaivedPenalty")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
 
                     b.HasKey("Id");
 
@@ -1649,11 +1689,22 @@ namespace Microfinance.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("AdvanceAllocated")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
                     b.Property<decimal>("Amount")
                         .HasPrecision(18, 2)
                         .HasColumnType("numeric(18,2)");
 
-                    b.Property<Guid>("CollectedByUserId")
+                    b.Property<string>("BankName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClearanceStatus")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("CollectedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -1669,6 +1720,9 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsReversed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -1677,6 +1731,10 @@ namespace Microfinance.Persistence.Migrations
 
                     b.Property<Guid>("LoanAccountId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("PaymentMode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<decimal>("PenaltyAllocated")
                         .HasPrecision(18, 2)
@@ -1689,6 +1747,15 @@ namespace Microfinance.Persistence.Migrations
                     b.Property<string>("ReceiptNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("ReferenceNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReversalReason")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("ReversedOnUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("timestamp with time zone");
@@ -1703,6 +1770,61 @@ namespace Microfinance.Persistence.Migrations
                     b.HasIndex("LoanAccountId");
 
                     b.ToTable("RepaymentTransactions");
+                });
+
+            modelBuilder.Entity("Microfinance.Domain.Entities.Reports.SavedReportTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilterParametersJson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastGeneratedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecipientEmailsCsv")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReportType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ScheduleFrequency")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TemplateName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SavedReportTemplates");
                 });
 
             modelBuilder.Entity("Microfinance.Domain.Entities.Accounting.GeneralLedgerAccount", b =>
@@ -1953,9 +2075,7 @@ namespace Microfinance.Persistence.Migrations
                 {
                     b.HasOne("Microfinance.Domain.Entities.Identity.ApplicationUser", "CollectedByUser")
                         .WithMany()
-                        .HasForeignKey("CollectedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CollectedByUserId");
 
                     b.HasOne("Microfinance.Domain.Entities.Loans.LoanAccount", "LoanAccount")
                         .WithMany("Transactions")
